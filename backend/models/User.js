@@ -76,4 +76,21 @@ class User {
     }
 
 
+    // update user by id
+
+    static async updateById(id, name, email, password) {
+        try {
+            const result = await db.query('UPDATE users SET name = $1, email = $2, password = $3 WHERE id = $4 RETURNING *', [name, email, password, id]);
+            if (result.rows.length > 0) {
+                const user = result.rows[0];
+                return new User(user.id, user.name, user.email, user.password);
+            } else {
+                return null; // User not found
+            }
+
+        } catch (error) {
+            console.log("Erro ao atualizar usuário: ", error);
+            throw error;
+        }
+    }
 }
