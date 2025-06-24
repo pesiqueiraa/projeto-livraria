@@ -3,11 +3,11 @@ const db = require('../config/database');
 
 class User {
 
-    constructor (id, name, email, password){
+    constructor(id, name, email, password) {
         this.id = id,
-        this.name = name,
-        this.email = email,
-        this.password = password
+            this.name = name,
+            this.email = email,
+            this.password = password
     }
 
     // create a new user 
@@ -24,7 +24,7 @@ class User {
             const user = result.rows[0];
             return new User(user.id, user.name, user.email, user.password);
 
-        } catch (error){
+        } catch (error) {
             console.log("Erro ao criar usuário: ", error);
             throw error;
         }
@@ -50,17 +50,30 @@ class User {
     static async findById(id) {
         try {
             const result = await db.query('SELECT * FROM users WHERE id = $1', [id])
-            if (result.rows.length > 0){
+            if (result.rows.length > 0) {
                 const user = result.rows[0];
                 return new User(user.id, user.name, user.email, user.password);
             } else {
                 return null; // User not found
             }
-        } catch (error) {  
+        } catch (error) {
             console.log("Erro ao buscar usuário por ID: ", error);
             throw error;
-        } 
+        }
     }
-    
+
+    // delete user by id
+    static async deleteById(id) {
+        try {
+            const result = await db.query('DELETE FROM users WHERE id = $1 RETURNING *', [id]);
+            if (result.rows.length > 0) {
+                return true; // User deleted successfully
+            }
+        } catch (error) {
+            console.log("Erro ao deletar usuário: ", error);
+            throw error;
+        }
+    }
+
 
 }
