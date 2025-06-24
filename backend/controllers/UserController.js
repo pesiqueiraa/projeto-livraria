@@ -25,6 +25,31 @@ class UserController {
         }
     }
 
+    // PUT /users/:id - Update user by ID
+    static async updateUser(req, res) {
+        const id = req.params.id;
+        const { name, email, password } = req.body;
+        try {
+            // basic validation
+            if (!name || !email || !password) {
+                return res.status(400).json({
+                    error: 'Nome, e-mail e senha são obrigatórios.'
+                });
+            }
+            // updateById 
+            const updatedUser = await User.updateById(id, name, email, password);
+            res.status(200).json({
+                message: 'Usuário atualizado com sucesso',
+                user: { id: updatedUser.id, name: updatedUser.name, email: updatedUser.email }
+            });
+        } catch (error) {
+            console.error("Erro ao atualizar usuário: ", error);
+            res.status(500).json({
+                error: 'An error occurred while updating the user.'
+            });
+        }   
+    }
+
     // POST /users/login - Login user
     static async loginUser(req, res) {
         const { email, password } = req.body;
