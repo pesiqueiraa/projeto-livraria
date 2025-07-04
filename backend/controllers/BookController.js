@@ -19,6 +19,7 @@ class BookController {
                     title: newBook.title, 
                     author: newBook.author,
                     genre_id: newBook.genre_id,
+                    genre: newBook.genre,
                     read_date: newBook.read_date,
                     rating: newBook.rating,
                     review: newBook.review
@@ -52,6 +53,7 @@ class BookController {
                     title: updatedBook.title, 
                     author: updatedBook.author,
                     genre_id: updatedBook.genre_id,
+                    genre: updatedBook.genre,
                     read_date: updatedBook.read_date,
                     rating: updatedBook.rating,
                     review: updatedBook.review
