@@ -3,18 +3,26 @@ const Book = require('../models/Book');
 class BookController {
     // POST /books - Create a new book
     static async createBook(req, res) {
-        const { title, author, genre, publishedYear } = req.body;
+        const { title, author, genre_id, read_date, rating, review } = req.body;
         try {
             // basic validation
-            if (!title || !author || !genre || !publishedYear) {
+            if (!title || !author || !genre_id) {
                 return res.status(400).json({ 
-                    error: 'Title, author, genre and published year are required.' 
+                    error: 'Title, author and genre_id are required.' 
                 });
             }
-            const newBook = await Book.create(title, author, genre, publishedYear);
+            const newBook = await Book.create(title, author, genre_id, read_date, rating, review);
             res.status(201).json({ 
                 message: 'Book created successfully', 
-                book: { id: newBook.id, title: newBook.title, author: newBook.author } 
+                book: { 
+                    id: newBook.id, 
+                    title: newBook.title, 
+                    author: newBook.author,
+                    genre_id: newBook.genre_id,
+                    read_date: newBook.read_date,
+                    rating: newBook.rating,
+                    review: newBook.review
+                } 
             });
 
         } catch (error) {
@@ -28,18 +36,26 @@ class BookController {
     // PUT /books/:id - Update book by ID
     static async updateBook(req, res) {
         const id = req.params.id;
-        const { title, author, genre, publishedYear } = req.body;
+        const { title, author, genre_id, read_date, rating, review } = req.body;
         try {
             // basic validation
-            if (!title || !author || !genre || !publishedYear) {
+            if (!title || !author || !genre_id) {
                 return res.status(400).json({
-                    error: 'Title, author, genre and published year are required.'
+                    error: 'Title, author and genre_id are required.'
                 });
             }
-            const updatedBook = await Book.updateById(id, title, author, genre, publishedYear);
+            const updatedBook = await Book.updateById(id, title, author, genre_id, read_date, rating, review);
             res.status(200).json({
                 message: 'Book updated successfully',
-                book: { id: updatedBook.id, title: updatedBook.title, author: updatedBook.author }
+                book: { 
+                    id: updatedBook.id, 
+                    title: updatedBook.title, 
+                    author: updatedBook.author,
+                    genre_id: updatedBook.genre_id,
+                    read_date: updatedBook.read_date,
+                    rating: updatedBook.rating,
+                    review: updatedBook.review
+                }
             });
         } catch (error) {
             console.error("Error updating book: ", error);
