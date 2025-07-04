@@ -49,6 +49,19 @@ class BookController {
         }   
     }
 
+    // GET /books - Get all books
+    static async getAllBooks(req, res) {
+        try {
+            const books = await Book.getAll();
+            res.status(200).json(books);
+        } catch (error) {
+            console.error("Error fetching books: ", error);
+            res.status(500).json({
+                error: 'An error occurred while fetching books.'
+            });
+        }
+    }
+
     // GET /books/:id - Get book by ID
     static async getBookById(req, res) {
         const id = req.params.id;
@@ -63,6 +76,25 @@ class BookController {
             res.status(500).json({
                 error: 'An error occurred while fetching the book.'
             }); 
+        }
+    }
+
+    // DELETE /books/:id - Delete book by ID
+    static async deleteBook(req, res) {
+        const id = req.params.id;
+        try {
+            const result = await Book.deleteById(id);
+            if (!result) {
+                return res.status(404).json({ error: 'Book not found.' });
+            }
+            res.status(200).json({
+                message: 'Book deleted successfully'
+            });
+        } catch (error) {
+            console.error("Error deleting book: ", error);
+            res.status(500).json({
+                error: 'An error occurred while deleting the book.'
+            });
         }
     }
 }
